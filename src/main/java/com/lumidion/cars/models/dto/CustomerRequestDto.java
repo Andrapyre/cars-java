@@ -1,4 +1,4 @@
-package com.lumidion.cars.models;
+package com.lumidion.cars.models.dto;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ public record CustomerRequestDto(String firstName, String lastName, String city,
         Objects.requireNonNull(apiKey);
     }
 
-    public Customer toCustomer(long id) {
-        return new Customer(id, firstName, lastName, city, country, apiKey);
+    public CustomerResponseDto toCustomer(int id) {
+        return new CustomerResponseDto(id, firstName, lastName, city, country, apiKey);
     }
 }
