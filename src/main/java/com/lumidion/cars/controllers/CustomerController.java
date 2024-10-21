@@ -1,9 +1,9 @@
 package com.lumidion.cars.controllers;
 
-import com.lumidion.cars.models.dto.CarResponseDto;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 import com.lumidion.cars.models.dto.CustomerRequestDto;
 import com.lumidion.cars.models.dto.CustomerResponseDto;
-import com.lumidion.cars.service.CarService;
 import com.lumidion.cars.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-
 @RestController
 public class CustomerController {
 
@@ -25,6 +23,7 @@ public class CustomerController {
 
     @Autowired
     CustomerService customerService;
+
     @RequestMapping(value = "/customers/{customerId}", method = GET)
     public ResponseEntity<CustomerResponseDto> getCustomer(@PathVariable int customerId) {
         try {
@@ -41,12 +40,9 @@ public class CustomerController {
     @RequestMapping(value = "/customers", method = POST)
     public ResponseEntity<CustomerResponseDto> createCustomer(@RequestBody CustomerRequestDto customerPayload) {
         try {
-            CustomerResponseDto customer = customerService
-                    .saveCustomer(customerPayload.toCustomer())
-                    .toDto();
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(customer);
+            CustomerResponseDto customer =
+                    customerService.saveCustomer(customerPayload.toCustomer()).toDto();
+            return ResponseEntity.status(HttpStatus.CREATED).body(customer);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(500).build();
@@ -70,9 +66,11 @@ public class CustomerController {
     }
 
     @RequestMapping(value = "/customers/{customerId}", method = PATCH)
-    public ResponseEntity<CustomerResponseDto> updateCustomer(@RequestBody CustomerRequestDto customerPayload, @PathVariable int customerId) {
+    public ResponseEntity<CustomerResponseDto> updateCustomer(
+            @RequestBody CustomerRequestDto customerPayload, @PathVariable int customerId) {
         try {
-            return customerService.getCustomer(customerId)
+            return customerService
+                    .getCustomer(customerId)
                     .map(customer -> {
                         customer.updateFromRequest(customerPayload);
 
@@ -80,8 +78,7 @@ public class CustomerController {
                         return ResponseEntity.ok(customer.toDto());
                     })
                     .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, String.format("No customer found for id: %s", customerId)
-                    ));
+                            HttpStatus.NOT_FOUND, String.format("No customer found for id: %s", customerId)));
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(500).build();

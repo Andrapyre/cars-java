@@ -1,7 +1,6 @@
 package com.lumidion.cars.models.dto;
 
 import com.lumidion.cars.models.db.Customer;
-
 import java.util.Objects;
 
 public record CustomerRequestDto(String firstName, String lastName, String city, String country, String email) {

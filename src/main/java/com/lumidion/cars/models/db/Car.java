@@ -3,12 +3,10 @@ package com.lumidion.cars.models.db;
 import com.lumidion.cars.models.dto.CarRequestDto;
 import com.lumidion.cars.models.dto.CarResponseDto;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "cars")

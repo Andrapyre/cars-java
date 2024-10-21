@@ -1,15 +1,10 @@
 package com.lumidion.cars.service;
 
-import com.lumidion.cars.models.db.Car;
 import com.lumidion.cars.models.db.Customer;
-import com.lumidion.cars.models.dto.CustomerResponseDto;
-import com.lumidion.cars.repository.CarRepository;
 import com.lumidion.cars.repository.CustomerRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -21,6 +16,7 @@ public class CustomerService {
     }
 
     public Optional<Customer> getCustomer(int id) {
+
         return customerRepository.findById(id);
     }
 

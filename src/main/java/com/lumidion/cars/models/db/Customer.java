@@ -3,12 +3,9 @@ package com.lumidion.cars.models.db;
 import com.lumidion.cars.models.dto.CustomerRequestDto;
 import com.lumidion.cars.models.dto.CustomerResponseDto;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "customers")
@@ -24,6 +21,7 @@ public class Customer implements Serializable {
 
     @Column(name = "last_name")
     private String lastName;
+
     private String city;
     private String country;
 
