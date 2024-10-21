@@ -2,6 +2,7 @@ package com.lumidion.cars.service;
 
 import com.lumidion.cars.models.db.Car;
 import com.lumidion.cars.models.db.Customer;
+import com.lumidion.cars.models.dto.CustomerResponseDto;
 import com.lumidion.cars.repository.CarRepository;
 import com.lumidion.cars.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
