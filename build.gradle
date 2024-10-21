@@ -2,10 +2,26 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
+    id "com.diffplug.spotless" version "6.25.0"
 }
 
 group = 'com.lumidion'
 version = '0.0.1-SNAPSHOT'
+
+spotless {
+    java {
+        // Use the default importOrder configuration
+        importOrder()
+
+
+        removeUnusedImports()
+
+        // Choose one of these formatters.
+        palantirJavaFormat() // has its own section below
+
+        formatAnnotations()  // fixes formatting of type annotations, see below
+    }
+}
 
 java {
     toolchain {
@@ -29,7 +45,7 @@ dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.4'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.20.0'
     implementation group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.20.0'
-    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.34'
+//    implementation group: 'com.diffplug.spotless', name: 'spotless-plugin-gradle', version: '6.25.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

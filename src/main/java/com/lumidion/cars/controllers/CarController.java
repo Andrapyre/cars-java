@@ -1,8 +1,11 @@
 package com.lumidion.cars.controllers;
 
-import com.lumidion.cars.models.dto.CarResponseDto;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 import com.lumidion.cars.models.dto.CarRequestDto;
+import com.lumidion.cars.models.dto.CarResponseDto;
 import com.lumidion.cars.service.CarService;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.UUID;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 public class CarController {
@@ -40,14 +39,12 @@ public class CarController {
     }
 
     @RequestMapping(value = "/customers/{customerId}/cars", method = POST)
-    public ResponseEntity<CarResponseDto> createCar(@RequestBody CarRequestDto carPayload, @PathVariable int customerId) {
+    public ResponseEntity<CarResponseDto> createCar(
+            @RequestBody CarRequestDto carPayload, @PathVariable int customerId) {
         try {
-            CarResponseDto car = carService
-                    .saveCar(carPayload.toCar(customerId))
-                    .toDto();
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(car);
+            CarResponseDto car =
+                    carService.saveCar(carPayload.toCar(customerId)).toDto();
+            return ResponseEntity.status(HttpStatus.CREATED).body(car);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(500).build();
@@ -71,9 +68,11 @@ public class CarController {
     }
 
     @RequestMapping(value = "/customers/{customerId}/cars/{carId}", method = PATCH)
-    public ResponseEntity<CarResponseDto> updateCar(@RequestBody CarRequestDto carPayload, @PathVariable int customerId, @PathVariable UUID carId) {
+    public ResponseEntity<CarResponseDto> updateCar(
+            @RequestBody CarRequestDto carPayload, @PathVariable int customerId, @PathVariable UUID carId) {
         try {
-            return carService.getCar(carId)
+            return carService
+                    .getCar(carId)
                     .map(car -> {
                         car.updateFromRequest(carPayload);
 
@@ -81,8 +80,7 @@ public class CarController {
                         return ResponseEntity.ok(car.toDto());
                     })
                     .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, String.format("No car found for id: %s", carId.toString())
-                    ));
+                            HttpStatus.NOT_FOUND, String.format("No car found for id: %s", carId.toString())));
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(500).build();

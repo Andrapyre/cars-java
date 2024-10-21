@@ -1,9 +1,7 @@
 package com.lumidion.cars.models.dto;
 
 import com.lumidion.cars.models.db.Car;
-
 import java.util.Objects;
-import java.util.UUID;
 
 public record CarRequestDto(String model, String make, Integer producedIn) {
     public CarRequestDto {
