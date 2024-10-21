@@ -16,3 +16,9 @@ This project is to give a sample application that explores Spring Boot by creati
     ```
 5. The server should now be started on `localhost:8080`.
 6. Import the postman collection from `./postman-collection.json` and enjoy!
+
+### Testing
+
+1. Start the service with database, as described in the previous section.
+2. Ensure that you have installed all necessary dependencies with ```npm install```.
+3. Then run ```npm run test```
