@@ -11,12 +11,16 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    public Customer createCustomer(Customer customer) {
+        customer.setNewApiKey();
+        return customerRepository.save(customer);
+    }
+
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
     public Optional<Customer> getCustomer(int id) {
-
         return customerRepository.findById(id);
     }
 

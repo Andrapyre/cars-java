@@ -5,10 +5,12 @@ import com.lumidion.cars.models.dto.CustomerResponseDto;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "customers")
+@SecondaryTable(name = "api_keys", pkJoinColumns = @PrimaryKeyJoinColumn(name = "customer_id"))
 public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +27,23 @@ public class Customer implements Serializable {
     private String city;
     private String country;
 
+    @Column(table = "api_keys", name = "api_key")
+    private String apiKey;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public CustomerResponseDto toDto() {
-        return new CustomerResponseDto(id, firstName, lastName, city, country, email);
+        return new CustomerResponseDto(id, firstName, lastName, city, country, email, apiKey);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getApiKey() {
+        return apiKey;
     }
 
     public String getEmail() {
@@ -71,6 +84,10 @@ public class Customer implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setNewApiKey() {
+        this.apiKey = UUID.randomUUID().toString().replace("-", "").toUpperCase();
     }
 
     public void updateFromRequest(CustomerRequestDto request) {
