@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
-//To set debug logging on, just change to: @EnableWebSecurity(debug = true)
+// To set debug logging on, just change to: @EnableWebSecurity(debug = true)
 @EnableWebSecurity
 public class SecurityConfig {
 
