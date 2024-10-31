@@ -17,8 +17,8 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    public Optional<Car> getCar(UUID id) {
-        return carRepository.findById(id);
+    public Optional<Car> getCar(UUID id, int customerId) {
+        return carRepository.getCarWithCustomerId(id, customerId);
     }
 
     public boolean deleteCar(UUID id) {

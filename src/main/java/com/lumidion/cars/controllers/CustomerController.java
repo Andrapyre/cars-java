@@ -41,7 +41,7 @@ public class CustomerController {
     public ResponseEntity<CustomerResponseDto> createCustomer(@RequestBody CustomerRequestDto customerPayload) {
         try {
             CustomerResponseDto customer =
-                    customerService.saveCustomer(customerPayload.toCustomer()).toDto();
+                    customerService.createCustomer(customerPayload.toCustomer()).toDto();
             return ResponseEntity.status(HttpStatus.CREATED).body(customer);
         } catch (Exception e) {
             logger.error(e.getMessage());
