@@ -24,14 +24,13 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/customers/{{customerId}}",
+							"raw": "localhost:8080/customers",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"customers",
-								"{{customerId}}"
+								"customers"
 							]
 						}
 					},
@@ -212,6 +211,16 @@
 			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -243,6 +252,11 @@
 		{
 			"key": "carId",
 			"value": "5d37c2cc-45dd-40a3-8c0e-1fb5dd92f131",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "N0U2QzM1MzU1NUM2NDBGRDgwNjQzOTI1RkI1NEUwNDYK",
 			"type": "string"
 		}
 	]

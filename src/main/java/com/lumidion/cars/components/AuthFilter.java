@@ -34,45 +34,50 @@ public class AuthFilter extends OncePerRequestFilter {
         if (!Objects.equals(request.getRequestURI(), "/customers")
                 && request.getRequestURI().matches("^/customers/.*")) {
             DefaultBearerTokenResolver resolver = new DefaultBearerTokenResolver();
-            String token = resolver.resolve(request);
-            String apiKey = new String(Base64.getDecoder().decode(token)).trim();
 
             try {
-                Optional<Integer> customerIdOption = apiKeyRepository.getCustomerIdFromApiKey(apiKey);
-
-                if (customerIdOption.isEmpty()) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return;
-                } else {
-                    try {
-                        String customerIdAsString = request.getRequestURI()
-                                .replaceFirst("^/customers/", "")
-                                .replaceFirst("/.*", "");
-                        Integer customerId = Integer.decode(customerIdAsString);
-
-                        if (!Objects.equals(customerId, customerIdOption.get())) {
-                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                            return;
-                        } else {
-                            Authentication authentication = new BearerTokenAuthentication(
-                                    new DefaultOAuth2User(null, Map.of("id", customerId), "id"),
-                                    new OAuth2AccessToken(
-                                            OAuth2AccessToken.TokenType.BEARER,
-                                            apiKey,
-                                            Instant.now(),
-                                            Instant.now().plusMillis(60000),
-                                            Set.of()),
-                                    null);
-                            SecurityContextHolder.getContext().setAuthentication(authentication);
-                        }
-                    } catch (Exception err) {
+                String token = resolver.resolve(request);
+                String apiKey = new String(Base64.getDecoder().decode(token)).trim();
+                try {
+                    Optional<Integer> customerIdOption = apiKeyRepository.getCustomerIdFromApiKey(apiKey);
+                    logger.info(customerIdOption.toString());
+                    if (customerIdOption.isEmpty()) {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         return;
+                    } else {
+                        try {
+                            String customerIdAsString = request.getRequestURI()
+                                    .replaceFirst("^/customers/", "")
+                                    .replaceFirst("/.*", "");
+                            Integer customerId = Integer.decode(customerIdAsString);
+
+                            if (!Objects.equals(customerId, customerIdOption.get())) {
+                                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                                return;
+                            } else {
+                                Authentication authentication = new BearerTokenAuthentication(
+                                        new DefaultOAuth2User(null, Map.of("id", customerId), "id"),
+                                        new OAuth2AccessToken(
+                                                OAuth2AccessToken.TokenType.BEARER,
+                                                apiKey,
+                                                Instant.now(),
+                                                Instant.now().plusMillis(60000),
+                                                Set.of()),
+                                        null);
+                                SecurityContextHolder.getContext().setAuthentication(authentication);
+                            }
+                        } catch (Exception err) {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            return;
+                        }
                     }
+                } catch (Exception err) {
+                    logger.error(err.getMessage());
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
             } catch (Exception err) {
-                logger.error(err.getMessage());
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         }
 

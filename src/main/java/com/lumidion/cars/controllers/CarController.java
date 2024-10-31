@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class CarController {
@@ -29,7 +28,7 @@ public class CarController {
     public ResponseEntity<CarResponseDto> getCar(@PathVariable int customerId, @PathVariable UUID carId) {
         try {
             return carService
-                    .getCar(carId)
+                    .getCar(carId, customerId)
                     .map(car -> ResponseEntity.ok(car.toDto()))
                     .orElse(ResponseEntity.notFound().build());
         } catch (Exception e) {
@@ -72,15 +71,14 @@ public class CarController {
             @RequestBody CarRequestDto carPayload, @PathVariable int customerId, @PathVariable UUID carId) {
         try {
             return carService
-                    .getCar(carId)
+                    .getCar(carId, customerId)
                     .map(car -> {
                         car.updateFromRequest(carPayload);
 
                         carService.saveCar(car);
                         return ResponseEntity.ok(car.toDto());
                     })
-                    .orElseThrow(() -> new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, String.format("No car found for id: %s", carId.toString())));
+                    .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
         } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.status(500).build();

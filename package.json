@@ -4,6 +4,7 @@
   "description": "## Description This project is to give a sample application that explores Spring Boot by creating a set of REST APIs to manage cars and the customers that own them.",
   "main": "index.js",
   "scripts": {
+    "fmt-fix": "eslint . --fix",
     "test": "jest --verbose"
   },
   "author": "",
